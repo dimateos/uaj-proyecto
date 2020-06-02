@@ -1,2 +1,2 @@
-# js-proyecto
-Juego de plataformas para concienciar sobre la acumulación de basura en los océanos
+# uaj-proyecto
+Proyecto para la asignatura UAJ que consiste en crear un sistema que ejecute los inputs guardados en un fichero para recrear partidas.
