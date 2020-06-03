@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     public FadingUI deadUI;
     public Vector3 initialVel;
     public float movementMultiplierWhenFull = 0.4f;
+    private bool _inputInteract = false;
 
     public void Awake()
     {
@@ -221,5 +222,13 @@ public class Player : MonoBehaviour
 
         // TELEMETRY
         EventTracker.GetInstance().RegisterPhotoEvent(fish);
+    }
+
+    public void SetInputInteract(bool interact) {
+        _inputInteract = interact;
+    }
+
+    public bool GetInputInteract() {
+        return _inputInteract;
     }
 }
