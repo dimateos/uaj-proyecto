@@ -9,12 +9,13 @@ public class BoatInteraction : MonoBehaviour
     public string newspaperSceneName = "Final";
     public UI_InteractionTip controlsTip;
     public string additionalText = "para entrar al barco";
+    private bool _inputInteract = false;
 
     private Player _player = null;
 
     void Update()
     {
-        if (_player != null && Input.GetButtonUp("Interact")) {
+        if (_player != null && _player.GetInputInteract()) {
             _player.updateProgress(false);
 
             // Telemetry
@@ -29,6 +30,8 @@ public class BoatInteraction : MonoBehaviour
                 SceneManager.LoadScene(boatSceneName);
             }
         }
+
+        if (_player != null) _player.SetInputInteract(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

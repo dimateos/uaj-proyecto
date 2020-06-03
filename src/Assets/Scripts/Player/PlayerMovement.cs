@@ -30,6 +30,9 @@ public class PlayerMovement : MonoBehaviour {
 
     private float _boostTimer = 0;
 
+    private Vector2 _inputDir;
+    private bool _inputBoost = false;
+
 	void Start () {
         _rb = GetComponent<Rigidbody2D>();
         _player = GetComponent<Player>();
@@ -39,15 +42,12 @@ public class PlayerMovement : MonoBehaviour {
         Vector2 currentVel = _rb.velocity;
         Vector2 currentDir = _player.insideWater() ? Vector2.up : Vector2.down;
 
-        float hMov = Input.GetAxis("Horizontal");
-        float vMov = Input.GetAxis("Vertical");
-
-        if (hMov != 0 || vMov != 0) {
-            currentDir = new Vector2(hMov, vMov).normalized;
+        if (_inputDir.x != 0 || _inputDir.y != 0) {
+            currentDir = _inputDir;
             if (!_player.insideWater()) currentDir.y = -1;
 
             if (currentDir.magnitude < currentMaxSpeed && _player.insideWater()) {
-                Vector2 force = new Vector2(hMov, vMov).normalized;
+                Vector2 force = _inputDir.normalized;
 
                 _rb.AddForce( force * Time.deltaTime * currentAcceleration * movementModifier);
             }
@@ -63,10 +63,18 @@ public class PlayerMovement : MonoBehaviour {
 
         // Boost
         if (_boostTimer > 0) _boostTimer -= Time.deltaTime;
-        else if (_player.insideWater() && Input.GetButton("Fire3")) {
+        else if (_player.insideWater() && _inputBoost) {
             _boostTimer = currentBoostCooldown;
             _rb.AddForce(_rb.velocity * currentBoostForce * movementModifier);
         }
+    }
+
+    public void Move(Vector2 dir) {
+        _inputDir = dir;
+    }
+
+    public void Boost(bool boost) {
+        _inputBoost = boost;
     }
 
     public void updateLevel()

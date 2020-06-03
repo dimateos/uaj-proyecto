@@ -14,6 +14,7 @@ public class PlayerPhotos : MonoBehaviour
     private Image _photoUIImage;
 
     private Fish _fishOnRange;
+    private bool _inputPhoto = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,10 +27,11 @@ public class PlayerPhotos : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_fishOnRange != null && Input.GetButtonDown("Photo")) {
+        if (_fishOnRange != null && _inputPhoto) {
             photographFish(_fishOnRange);
             _fishOnRange = null;
         }
+        _inputPhoto = false;
 
         Vector3 mouseScreen = Input.mousePosition;
         Vector3 mouse = Camera.main.ScreenToWorldPoint(mouseScreen);
@@ -48,7 +50,11 @@ public class PlayerPhotos : MonoBehaviour
         if (fish == _fishOnRange) _fishOnRange = null;
     }
 
-    public void photographFish(Fish fish)
+    public void photographFish() {
+        _inputPhoto = true;
+    }
+
+    private void photographFish(Fish fish)
     {
         player.photographFish(fish.fishType);
         photoUI.SetActive(true);
