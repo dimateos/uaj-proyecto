@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(TrashCollector))]
 [RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerController))]
 public class Player : MonoBehaviour
 {
     private static Progress _progress;
