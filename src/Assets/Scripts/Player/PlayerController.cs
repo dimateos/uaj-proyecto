@@ -10,41 +10,12 @@ public class PlayerController : MonoBehaviour
     private PlayerPhotos _pPhotos;
     private Player _player;
 
-    [Header("Saved Input")]
-    [SerializeField] private bool _useSavedInput;
-    [SerializeField] private bool _saveInput;
-    [SerializeField] private string _savedInputFilename;
-
-    private InputEventTrace _trace;
-    private InputEventTrace.ReplayController _replayController;
-
     void Start()
     {
         // Get the necessary components
         _pMovement = GetComponent<PlayerMovement>();
         _pPhotos = GetComponentInChildren<PlayerPhotos>();
         _player = GetComponent<Player>();
-
-        // Init the replay system
-        if (_useSavedInput) {
-            Debug.Log("Replay: Loading Input Trace from file '" + _savedInputFilename + "'");
-            _trace = InputEventTrace.LoadFrom(_savedInputFilename);
-            _replayController = _trace.Replay();
-            _replayController.PlayAllEventsAccordingToTimestamps();
-        }
-        else if (_saveInput) {
-            Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
-            _trace = new InputEventTrace();
-            _trace.Enable();
-        }
-    }
-
-    private void OnDestroy() {
-        if (!_saveInput || _useSavedInput)
-            return;
-
-        Debug.Log("Replay: Saving Input to file '" + _savedInputFilename + "'");
-        _trace.WriteTo(_savedInputFilename);
     }
 
     public void Move(Vector2 dir) {
