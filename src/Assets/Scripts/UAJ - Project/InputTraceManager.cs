@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 
 public enum TraceManagerMode {RECORD, REPRODUCE, NONE};
 
-public class InputTraceManager : MonoBehaviour
-{
-    
+public class InputTraceManager : MonoBehaviour {
+
     private static InputTraceManager _instance = null;
 
     [Header("Saved Input")]
@@ -17,9 +19,12 @@ public class InputTraceManager : MonoBehaviour
     [SerializeField] private string _savedInputFilename;
     private string _savePath = "/TraceFiles/";
 
+    [SerializeField] private SceneAsset[] _startScenes;
+    [SerializeField] private SceneAsset[] _endScenes;
 
     private InputEventTrace _trace;
     private InputEventTrace.ReplayController _replayController;
+    private bool _initialized = false;
 
     public static InputTraceManager GetInstance()
     {
@@ -29,24 +34,55 @@ public class InputTraceManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        _savePath = Application.persistentDataPath + _savePath;
+
         if (_instance == null) _instance = this;
         else Destroy(this.gameObject);
-        _savePath = Application.persistentDataPath + _savePath;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    private void OnEnable() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        if (!_initialized) foreach (SceneAsset startScene in _startScenes)
+                if (scene.name == startScene.name)
+                    Init();
+        else foreach (SceneAsset endScene in _endScenes)
+                if (scene.name == endScene.name)
+                    Quit();
+    }
+
+    private void Init() {
+        if (_initialized) return;
+
         // Init the replay system
-        switch (_traceMode)
-        {
+        switch (_traceMode) {
             // Replays input from saved file
             case TraceManagerMode.REPRODUCE:
                 /// todo: aqui hay que asignar el savedinputfilename
                 Debug.Log("Replay: Loading Input Trace from file '" + _savedInputFilename + "'");
-                _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
+
+                if (File.Exists(_savePath + _savedInputFilename))
+                    _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
+                else {
+                    Debug.Log("Replay ERROR: File '" + _savedInputFilename + "' doesn't exist. Trace reproduction Cancelled.");
+                    return;
+                }
+
                 _replayController = _trace.Replay();
                 _replayController.PlayAllEventsAccordingToTimestamps();
+                _initialized = true;
                 break;
             // Saves input to file
             case TraceManagerMode.RECORD:
@@ -55,28 +91,33 @@ public class InputTraceManager : MonoBehaviour
                 _trace.Enable();
                 // Filename based on date
                 _savedInputFilename = "IT-" + System.DateTime.Now.ToString().Replace("/", "").Replace(" ", "_").Replace(":", ""); // format
+                _initialized = true;
                 break;
             case TraceManagerMode.NONE:
                 break;
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private void Quit() {
+        if (!_initialized) return;
 
-    private void OnDestroy()
-    {
         // Flush recorded data to file
-        if (_traceMode == TraceManagerMode.RECORD)
-        {
+        if (_traceMode == TraceManagerMode.RECORD) {
             Debug.Log("Replay: Saving Input to file '" + _savedInputFilename + "'");
             // Create save folder if it does not exist
-            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath); 
+            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
             _trace.WriteTo(_savePath + _savedInputFilename);
         }
+        else {
+            _trace.Clear();
+            _trace = null;
+        }
+
+        _initialized = false;
         return;
+    }
+
+    private void OnDestroy() {
+        Quit();
     }
 }

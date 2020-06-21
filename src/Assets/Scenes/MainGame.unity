@@ -6382,6 +6382,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _traceMode: 1
   _savedInputFilename: IT-20062020_134102
+  _startScenes:
+  - {fileID: 102900000, guid: 0c7874138c0a7b246895cafc34d529cc, type: 3}
+  - {fileID: 102900000, guid: e074f86dbd405004296fdf030765b6cc, type: 3}
+  _endScenes:
+  - {fileID: 102900000, guid: 8372e728f5faeb64ba1b93e9be3ec6b4, type: 3}
 --- !u!4 &429518235
 Transform:
   m_ObjectHideFlags: 0
