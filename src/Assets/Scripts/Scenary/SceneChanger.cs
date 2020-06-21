@@ -28,10 +28,9 @@ public class SceneChanger : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    private void Update() {
-        if (onCancel && Input.GetButtonUp("Cancel"))
-        {
-            ChangeScene();
-        }
+    public void OnCancel() {
+        if (!onCancel) return;
+
+        ChangeScene();
     }
 }

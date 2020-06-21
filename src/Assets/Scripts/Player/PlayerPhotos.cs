@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(PolygonCollider2D))]
@@ -33,7 +34,7 @@ public class PlayerPhotos : MonoBehaviour
         }
         _inputPhoto = false;
 
-        Vector3 mouseScreen = Input.mousePosition;
+        Vector3 mouseScreen = Mouse.current.position.ReadValue();
         Vector3 mouse = Camera.main.ScreenToWorldPoint(mouseScreen);
         float mouseAngle = -Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
 

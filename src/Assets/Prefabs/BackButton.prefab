@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3224769859820796598}
   - component: {fileID: 3224769859820796599}
   - component: {fileID: 3224769859820796596}
+  - component: {fileID: 3424065155441901575}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -63,11 +64,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 7e300b14550e0de4184a152b93be094d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -132,8 +132,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &3224769859820796596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +146,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: InitialMenu
   onCancel: 1
+  resetProgress: 0
+  startGame: 0
+--- !u!114 &3424065155441901575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3224769859820796618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 238793bcf2d6be04c838c6be07dca579,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0428d2ff-aad1-4b24-b1d7-e9e8c0050752
+    m_ActionName: Default/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 89a1c490-3fb6-4258-92a9-475043124d6a
+    m_ActionName: Default/Boost[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 48d06ded-0222-467b-9ad9-bf6b1d429b7f
+    m_ActionName: Default/Photo[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d405e246-d568-4d4a-a4b7-c921c0be311c
+    m_ActionName: Default/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 11e1645a-72b0-4b40-9653-4398b4570dee
+    m_ActionName: Default/ShowUI[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 564c316f-c4f8-4113-b347-f1f08a9e11ce
+    m_ActionName: Default/ShowInputMenu[/Keyboard/i]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 26959450-ce7d-4068-8fdb-53ede2e66090
+    m_ActionName: Default/Spotlight[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3224769859820796596}
+        m_MethodName: OnCancel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 46fe4a04-5e17-437e-add1-48118fe8c939
+    m_ActionName: Default/Cancel[/Keyboard/escape]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Default
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &3224769860340863706
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,11 +282,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.6839622, g: 0.6871372, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: c3b4a31c113ba3c489ef7e3008e4fd2d, type: 3}
     m_FontSize: 37

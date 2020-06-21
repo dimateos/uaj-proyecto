@@ -8,13 +8,17 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerMovement _pMovement;
     private PlayerPhotos _pPhotos;
+    private PlayerSpotlight _pSpotlight;
     private Player _player;
+
+    [SerializeField] private HiddenUI _hiddenUI;
 
     void Start()
     {
         // Get the necessary components
         _pMovement = GetComponent<PlayerMovement>();
         _pPhotos = GetComponentInChildren<PlayerPhotos>();
+        _pSpotlight = GetComponentInChildren<PlayerSpotlight>();
         _player = GetComponent<Player>();
     }
 
@@ -49,5 +53,18 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract() {
         Interact();
+    }
+
+    public void Spotlight() {
+        _pSpotlight.TurnOnOff();
+    }
+
+    public void OnSpotlight() {
+        Spotlight();
+    }
+
+    public void OnShowUI(InputValue value) {
+        if (value.isPressed) _hiddenUI.showUI();
+        else _hiddenUI.hideUI();
     }
 }

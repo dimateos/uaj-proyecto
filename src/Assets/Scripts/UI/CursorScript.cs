@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
@@ -22,6 +23,6 @@ public class CursorScript : MonoBehaviour {
 
         if (playerPhotos.canPhotograph()) _img.sprite = canPhotographCursor;
 
-        transform.position = Input.mousePosition;
+        transform.position = Mouse.current.position.ReadValue();
     }
 }

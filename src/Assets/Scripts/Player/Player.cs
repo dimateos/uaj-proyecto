@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(TrashCollector))]
@@ -69,7 +70,7 @@ public class Player : MonoBehaviour
         updateInsideWater();
 
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+        if (Keyboard.current.digit0Key.wasPressedThisFrame) {
             _progress.upgradeOxygenLevel();
             _progress.upgradeSpeedLevel();
             _progress.upgradeSpotlightLevel();
@@ -77,11 +78,11 @@ public class Player : MonoBehaviour
             updateAllLevels();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2)) {
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) {
             _progress.DEBUG_nextTrashStoryLevel();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3)) {
+        if (Keyboard.current.digit2Key.wasPressedThisFrame) {
             _progress.DEBUG_photographAllFish();
         }
 #endif

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Text))]
 public class BlockingDialogue : MonoBehaviour
@@ -23,7 +24,10 @@ public class BlockingDialogue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown) nextText();
+        if (Keyboard.current.anyKey.isPressed
+            || Mouse.current.leftButton.isPressed
+            || Mouse.current.rightButton.isPressed
+            || Mouse.current.middleButton.isPressed) nextText();
     }
 
     private void nextText() {

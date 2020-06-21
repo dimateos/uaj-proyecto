@@ -8,11 +8,6 @@ public class PlayerSpotlight : PlayerLight {
 
     void Update()
     {
-        if (Input.GetButtonDown("Spotlight")) {
-            player.setSpotlightActive(!player.isSpotlightActive());
-            _light.enabled = player.isSpotlightActive();
-        }
-
         if (!player.isSpotlightActive()) return;
 
         Vector3 mouseScreen = Input.mousePosition;
@@ -20,5 +15,10 @@ public class PlayerSpotlight : PlayerLight {
         float mouseAngle = -Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(mouseAngle, 90, 0);
+    }
+
+    public void TurnOnOff() {
+        player.setSpotlightActive(!player.isSpotlightActive());
+        _light.enabled = player.isSpotlightActive();
     }
 }

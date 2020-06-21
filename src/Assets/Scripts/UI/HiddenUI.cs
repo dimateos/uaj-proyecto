@@ -15,7 +15,7 @@ public class HiddenUI : MonoBehaviour
     private Vector3 _initialPos;
     private float _timer = 0;
 
-    private bool _visible = false;
+    protected bool _visible = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +28,6 @@ public class HiddenUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("ShowInfo")) showUI();
-        else if (Input.GetButtonUp("ShowInfo")) hideUI();
-
         if (_visible) {
             if (_timer < animationTime) _timer += Time.deltaTime;
             else _timer = animationTime;
