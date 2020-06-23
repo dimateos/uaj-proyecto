@@ -49,7 +49,7 @@ public class InputTraceManager : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     private void OnEnable() {
@@ -78,14 +78,15 @@ public class InputTraceManager : MonoBehaviour {
             // Do nothing
             case TraceManagerMode.NONE:
                 break;
-           
+
             // Saves input to file
             case TraceManagerMode.RECORD:
-                Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
-                _trace = new InputEventTrace();
-                _trace.Enable();
                 // Filename based on date
                 _savedInputFilename = "IT-" + System.DateTime.Now.ToString().Replace("/", "").Replace(" ", "_").Replace(":", ""); // format
+                Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
+
+                _trace = new InputEventTrace();
+                _trace.Enable();
                 _initialized = true;
                 break;
 
