@@ -7,16 +7,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public enum TraceManagerMode {RECORD, REPRODUCE, NONE};
+public enum TraceManagerMode {NONE, RECORD, REPRODUCE};
 
 public class InputTraceManager : MonoBehaviour {
 
     private static InputTraceManager _instance = null;
 
     [Header("Saved Input")]
-    [SerializeField] private TraceManagerMode _traceMode = TraceManagerMode.NONE;
-    [SerializeField] private string _savedInputFilename;
+    private TraceManagerMode _traceMode = TraceManagerMode.NONE;
+    private string _savedInputFilename = "";
     private string _savePath = "/TraceFiles/";
 
     [SerializeField] private SceneAsset[] _startScenes;
@@ -25,6 +26,9 @@ public class InputTraceManager : MonoBehaviour {
     private InputEventTrace _trace;
     private InputEventTrace.ReplayController _replayController;
     private bool _initialized = false;
+
+    private List<string> _filenames;
+    public Dropdown _dropdown;
 
     public static InputTraceManager GetInstance()
     {
@@ -38,12 +42,14 @@ public class InputTraceManager : MonoBehaviour {
 
         if (_instance == null) _instance = this;
         else Destroy(this.gameObject);
+
+        ReadFiles();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     private void OnEnable() {
@@ -68,22 +74,11 @@ public class InputTraceManager : MonoBehaviour {
 
         // Init the replay system
         switch (_traceMode) {
-            // Replays input from saved file
-            case TraceManagerMode.REPRODUCE:
-                /// todo: aqui hay que asignar el savedinputfilename
-                Debug.Log("Replay: Loading Input Trace from file '" + _savedInputFilename + "'");
 
-                if (File.Exists(_savePath + _savedInputFilename))
-                    _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
-                else {
-                    Debug.Log("Replay ERROR: File '" + _savedInputFilename + "' doesn't exist. Trace reproduction Cancelled.");
-                    return;
-                }
-
-                _replayController = _trace.Replay();
-                _replayController.PlayAllEventsAccordingToTimestamps();
-                _initialized = true;
+            // Do nothing
+            case TraceManagerMode.NONE:
                 break;
+           
             // Saves input to file
             case TraceManagerMode.RECORD:
                 Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
@@ -93,9 +88,67 @@ public class InputTraceManager : MonoBehaviour {
                 _savedInputFilename = "IT-" + System.DateTime.Now.ToString().Replace("/", "").Replace(" ", "_").Replace(":", ""); // format
                 _initialized = true;
                 break;
-            case TraceManagerMode.NONE:
+
+            // Replays input from saved file
+            case TraceManagerMode.REPRODUCE:
+                /// todo: aqui hay que asignar el savedinputfilename
+                Debug.Log("Replay: Loading Input Trace from file '" + _savedInputFilename + "'");
+
+                if (File.Exists(_savePath + _savedInputFilename))
+                    _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
+                else
+                {
+                    Debug.Log("Replay ERROR: File '" + _savedInputFilename + "' doesn't exist. Trace reproduction Cancelled.");
+                    return;
+                }
+
+                _replayController = _trace.Replay();
+                _replayController.PlayAllEventsAccordingToTimestamps();
+                _initialized = true;
                 break;
         }
+    }
+
+    private void ReadFiles()
+    {
+        _filenames = new List<string>();
+
+        if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
+        string[] allfiles = Directory.GetFiles(_savePath);
+
+        for (int i = 0; i < allfiles.Length; i++)
+        {
+            int index = _savePath.Length;
+            int a = 0;
+
+            string filename = "";
+
+            while (index < allfiles[i].Length)
+            {
+                filename += allfiles[i][index];
+
+                index++;
+                a++;
+            }
+
+            _filenames.Add(filename);
+        }
+    }
+
+    public List<string> GetFilenames()
+    {
+        return _filenames;
+    }
+
+    public void SetFilename()
+    {
+        if (_dropdown != null)
+            _savedInputFilename = _filenames[_dropdown.value];
+    }
+
+    public void SetTraceMode(int mode)
+    {
+        _traceMode = (TraceManagerMode)mode;
     }
 
     private void Quit() {
