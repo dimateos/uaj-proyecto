@@ -10,6 +10,8 @@ public class BlockingDialogue : MonoBehaviour
 {
     public string[] dialogues;
     public string nextScene;
+    public double minDelay = 0.5;
+    private double currentDelay = 0;
 
     private int _currentText = 0;
     private Text _text;
@@ -22,8 +24,14 @@ public class BlockingDialogue : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        //custom fixed delay
+        if (currentDelay > 0) {
+            currentDelay -= Time.fixedDeltaTime;
+            return; //skip this frame anyway
+        }
+
         if (Keyboard.current.anyKey.isPressed
             || Mouse.current.leftButton.isPressed
             || Mouse.current.rightButton.isPressed
@@ -31,6 +39,9 @@ public class BlockingDialogue : MonoBehaviour
     }
 
     private void nextText() {
+        //Debug.Log("Next of: " + _text.text);
+        currentDelay = minDelay;
+
         if (_currentText < dialogues.Length - 1)
             _text.text = dialogues[++_currentText];
         else SceneManager.LoadScene(nextScene);
