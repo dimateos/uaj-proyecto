@@ -40,11 +40,12 @@ public class EventTracker : MonoBehaviour
 
     //Crea el tracker segun la configuracion
     private void Start() {
-        if (!trackingActive) return;
-
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            //no need to load further if tracking is disabled
+            if (!trackingActive) return;
 
             //Id creado utilizando la fecha
             id = System.DateTime.Now.ToString();

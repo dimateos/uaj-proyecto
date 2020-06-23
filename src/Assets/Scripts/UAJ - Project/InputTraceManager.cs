@@ -39,6 +39,7 @@ public class InputTraceManager : MonoBehaviour {
     {
         DontDestroyOnLoad(this.gameObject);
         _savePath = Application.persistentDataPath + _savePath;
+        Debug.Log("Input Tracing: Path for saved files is '" + _savePath + "'");
 
         if (_instance == null) _instance = this;
         else Destroy(this.gameObject);
@@ -143,8 +144,11 @@ public class InputTraceManager : MonoBehaviour {
 
     public void SetFilename()
     {
-        if (_dropdown != null)
+        if (_dropdown != null && _filenames.Count > 0)
             _savedInputFilename = _filenames[_dropdown.value];
+    }
+    public string GetFilename() {
+        return _savedInputFilename;
     }
 
     public void SetTraceMode(int mode)
