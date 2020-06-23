@@ -40,6 +40,8 @@ public class EventTracker : MonoBehaviour
 
     //Crea el tracker segun la configuracion
     private void Start() {
+        if (!trackingActive) return;
+
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);

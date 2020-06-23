@@ -43,11 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c659a628eaab0c84e967be49e59b5f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingActive: 1
+  trackingActive: 0
   debug: 1
   timedFlush: 1
   flushTimer: 15
-  pType: 1
+  pType: 0
   sType: 1
   forzeOneLine: 1
   eTypesIgnored: 000000000000
