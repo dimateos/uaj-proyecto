@@ -29,6 +29,7 @@ public class InputTraceManager : MonoBehaviour {
 
     private List<string> _filenames;
     public Dropdown _dropdown;
+    public GameObject _replayingIndicator, _recordingIndicator;
 
     public static InputTraceManager GetInstance()
     {
@@ -78,6 +79,8 @@ public class InputTraceManager : MonoBehaviour {
 
             // Do nothing
             case TraceManagerMode.NONE:
+                _recordingIndicator.SetActive(false);
+                _replayingIndicator.SetActive(false);
                 break;
 
             // Saves input to file
@@ -88,6 +91,7 @@ public class InputTraceManager : MonoBehaviour {
 
                 _trace = new InputEventTrace();
                 _trace.Enable();
+                _recordingIndicator.SetActive(true);
                 _initialized = true;
                 break;
 
@@ -106,6 +110,7 @@ public class InputTraceManager : MonoBehaviour {
 
                 _replayController = _trace.Replay();
                 _replayController.PlayAllEventsAccordingToTimestamps();
+                _replayingIndicator.SetActive(true);
                 _initialized = true;
                 break;
         }
