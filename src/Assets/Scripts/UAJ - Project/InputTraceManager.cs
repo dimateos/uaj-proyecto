@@ -120,21 +120,21 @@ public class InputTraceManager : MonoBehaviour {
 
         for (int i = 0; i < allfiles.Length; i++)
         {
+            //add filename skipping initial path
             int index = _savePath.Length;
-            int a = 0;
 
             string filename = "";
-
             while (index < allfiles[i].Length)
             {
                 filename += allfiles[i][index];
-
                 index++;
-                a++;
             }
 
             _filenames.Add(filename);
         }
+
+        //reverse so newest stays on top and is selected by default
+        _filenames.Reverse();
     }
 
     public List<string> GetFilenames()
