@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -108,7 +109,11 @@ public class InputTraceManager : MonoBehaviour {
                     return;
                 }
 
+                foreach (InputDevice device in InputSystem.devices)
+                    InputSystem.DisableDevice(device);
+
                 _replayController = _trace.Replay();
+                _replayController.WithAllDevicesMappedToNewInstances();
                 _replayController.PlayAllEventsAccordingToTimestamps();
                 _replayingIndicator.SetActive(true);
                 _initialized = true;
@@ -171,7 +176,10 @@ public class InputTraceManager : MonoBehaviour {
             if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
             _trace.WriteTo(_savePath + _savedInputFilename);
         }
-        else {
+        else if (_traceMode == TraceManagerMode.REPRODUCE) {
+            foreach (InputDevice device in InputSystem.devices)
+                InputSystem.EnableDevice(device);
+
             _trace.Clear();
             _trace = null;
         }
