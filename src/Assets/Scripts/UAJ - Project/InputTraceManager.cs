@@ -39,11 +39,14 @@ public class InputTraceManager : MonoBehaviour {
 
     private void Awake()
     {
+        // Do not destroy on scene load, for singleton pattern
         DontDestroyOnLoad(this.gameObject);
         _savePath = Application.persistentDataPath + _savePath;
         Debug.Log("Input Tracing: Path for saved files is '" + _savePath + "'");
 
+        // Assign this as instance if there is none
         if (_instance == null) _instance = this;
+        // Previous instances have priority
         else Destroy(this.gameObject);
 
         ReadFiles();
@@ -121,10 +124,12 @@ public class InputTraceManager : MonoBehaviour {
         }
     }
 
+    // Acquires all input trace file routes from the savePath
     private void ReadFiles()
     {
         _filenames = new List<string>();
 
+        // If the directory does not exist, create it
         if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
         string[] allfiles = Directory.GetFiles(_savePath);
 
