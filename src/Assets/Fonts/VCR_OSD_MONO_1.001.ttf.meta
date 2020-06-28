@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: c3b4a31c113ba3c489ef7e3008e4fd2d
+guid: 1430f4200a4ca4448807e54bf237a3f0
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 90
+  fontSize: 100
   forceTextureCase: -1
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: RM Typerighter medium
+  fontName: VCR OSD Mono
   fontNames:
-  - RM Typerighter medium
+  - VCR OSD Mono
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
