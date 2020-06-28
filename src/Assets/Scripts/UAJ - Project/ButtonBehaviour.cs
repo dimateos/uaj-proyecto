@@ -6,14 +6,19 @@ using UnityEngine.UI;
 public class ButtonBehaviour : MonoBehaviour
 {
 
-    public Button _selected;
-    public Button _unselected1;
-    public Button _unselected2;
+    public Image _selected;
+    public Image _unselected1;
+    public Image _unselected2;
+
+    public void Start()
+    {
+        ChangeColour();
+    }
 
     public void ChangeColour()
     {
-        _selected.GetComponent<Image>().color = Color.red;
-        _unselected1.GetComponent<Image>().color = Color.white;
-        _unselected2.GetComponent<Image>().color = Color.white;
+        _selected.color = Color.green;
+        _unselected1.color = Color.white;
+        _unselected2.color = Color.white;
     }
 }
