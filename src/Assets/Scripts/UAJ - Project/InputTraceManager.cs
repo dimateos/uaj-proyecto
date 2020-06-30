@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using UnityEditor;
@@ -9,6 +8,7 @@ using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public enum TraceManagerMode {NONE, RECORD, REPRODUCE};
 
@@ -20,6 +20,7 @@ public class InputTraceManager : MonoBehaviour {
     private TraceManagerMode _traceMode = TraceManagerMode.NONE;
     private string _savedInputFilename = "";
     private string _savePath = "/TraceFiles/";
+    private string _seedPath = "/Seeds/";
 
     [SerializeField] private SceneAsset[] _startScenes;
     [SerializeField] private SceneAsset[] _endScenes;
@@ -27,6 +28,7 @@ public class InputTraceManager : MonoBehaviour {
     private InputEventTrace _trace;
     private InputEventTrace.ReplayController _replayController;
     private bool _initialized = false;
+    private int _initialSeed = 0;
 
     private List<string> _filenames;
     public Dropdown _dropdown;
@@ -42,6 +44,7 @@ public class InputTraceManager : MonoBehaviour {
         // Do not destroy on scene load, for singleton pattern
         DontDestroyOnLoad(this.gameObject);
         _savePath = Application.persistentDataPath + _savePath;
+        _seedPath = Application.persistentDataPath + _seedPath;
         Debug.Log("Input Tracing: Path for saved files is '" + _savePath + "'");
 
         // Assign this as instance if there is none
@@ -92,7 +95,7 @@ public class InputTraceManager : MonoBehaviour {
                 // Filename based on date
                 _savedInputFilename = "IT-" + System.DateTime.Now.ToString().Replace("/", "").Replace(" ", "_").Replace(":", ""); // format
                 Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
-
+                _initialSeed = Random.seed;
                 _trace = new InputEventTrace();
                 _trace.Enable();
                 _recordingIndicator.SetActive(true);
@@ -105,12 +108,29 @@ public class InputTraceManager : MonoBehaviour {
                 Debug.Log("Replay: Loading Input Trace from file '" + _savedInputFilename + "'");
 
                 if (File.Exists(_savePath + _savedInputFilename))
+                {
+                   
                     _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
+                }
                 else
                 {
-                    Debug.Log("Replay ERROR: File '" + _savedInputFilename + "' doesn't exist. Trace reproduction Cancelled.");
+                    Debug.LogError("Replay ERROR: File '" + _savedInputFilename + "' doesn't exist. Trace reproduction Cancelled.");
                     return;
                 }
+
+                if (File.Exists(_seedPath + _savedInputFilename + "Seed"))
+                {
+                    string randomSeed = File.ReadAllText(_seedPath + _savedInputFilename + "Seed");
+                    int seedValue = 0;
+                    if (int.TryParse(randomSeed, System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.NumberFormatInfo.InvariantInfo, out seedValue))
+                        Random.seed = seedValue;
+                    else
+                        Debug.LogWarning("Replay Warning: Seed file with incorrect format. Trace reproduction may not work as intented.");
+                }
+                else
+                    Debug.LogWarning("Replay Warning: Missing seed file. Trace reproduction may not work as intented.");
+
+
 
                 foreach (InputDevice device in InputSystem.devices)
                     InputSystem.DisableDevice(device);
@@ -177,9 +197,13 @@ public class InputTraceManager : MonoBehaviour {
         // Flush recorded data to file
         if (_traceMode == TraceManagerMode.RECORD) {
             Debug.Log("Replay: Saving Input to file '" + _savedInputFilename + "'");
+
             // Create save folder if it does not exist
-            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
+            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);            
             _trace.WriteTo(_savePath + _savedInputFilename);
+
+            if (!Directory.Exists(_seedPath)) Directory.CreateDirectory(_seedPath);
+            File.WriteAllText(_seedPath + _savedInputFilename+"Seed", _initialSeed.ToString());
         }
         else if (_traceMode == TraceManagerMode.REPRODUCE) {
             foreach (InputDevice device in InputSystem.devices)
@@ -195,5 +219,10 @@ public class InputTraceManager : MonoBehaviour {
 
     private void OnDestroy() {
         Quit();
+    }
+
+    private void LoadSeed(string s)
+    {
+        
     }
 }
