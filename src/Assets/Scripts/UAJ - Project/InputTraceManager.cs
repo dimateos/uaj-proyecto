@@ -220,9 +220,4 @@ public class InputTraceManager : MonoBehaviour {
     private void OnDestroy() {
         Quit();
     }
-
-    private void LoadSeed(string s)
-    {
-        
-    }
 }

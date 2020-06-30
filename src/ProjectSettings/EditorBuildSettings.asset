@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: d6fc6fd520ccacc44a47b5967c4ef150
+  - enabled: 1
+    path: Assets/Scenes/InputTest.unity
+    guid: d3f100365e6e3a345b07b39b6cb394b5
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 34f927f058514034f9a34262a8d55809,
       type: 2}
