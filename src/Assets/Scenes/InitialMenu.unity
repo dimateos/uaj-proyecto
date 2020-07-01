@@ -190,7 +190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: DEACTIVATED
+  m_Text: DESACTIVADO
 --- !u!222 &70687920
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -955,7 +955,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: REPRODUCE
+  m_Text: REPRODUCIR
 --- !u!222 &408326745
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1924,7 +1924,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: RECORD
+  m_Text: GRABAR
 --- !u!222 &817850338
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2504,7 +2504,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press I - Input Trace Menu
+  m_Text: Pulsa I - Input Trace Menu
 --- !u!222 &1073010630
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4294,7 +4294,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Go to Test Scene
+  m_Text: ESCENA DE PRUEBA
 --- !u!222 &1979912144
 CanvasRenderer:
   m_ObjectHideFlags: 0
