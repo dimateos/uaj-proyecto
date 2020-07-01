@@ -11,11 +11,12 @@ public class InputTestManager : MonoBehaviour
 
 
     public GameObject player, mirror;
+    public GameObject recordUI, playUI;
 
     private InputEventTrace record = null;
     private recordState state = recordState.none;
     private GameObject initial;
-    private Keyboard keyboard = null;
+    private Keyboard keyboard = null, keyboard2 = null;
     private InputEventTrace.ReplayController replay;
 
     private Vector3 offset = new Vector3(-8.902f, 0);
@@ -28,8 +29,16 @@ public class InputTestManager : MonoBehaviour
             Destroy(this);
         }
 
-        keyboard = InputSystem.GetDevice<Keyboard>();
-        InputSystem.EnableDevice(keyboard);
+        keyboard = (Keyboard)InputSystem.GetDevice("Keyboard1");
+        keyboard2 = (Keyboard)InputSystem.GetDevice("Keyboard2");
+        foreach (UnityEngine.InputSystem.InputDevice device in InputSystem.devices)
+        {
+            InputSystem.EnableDevice(device);
+            //Debug.Log(device.deviceId);
+            //Debug.Log(device.name);
+        }
+        
+
         mirror.GetComponent<SimpleMovement>().enabled = false;
         initial = new GameObject();
     }
@@ -39,9 +48,12 @@ public class InputTestManager : MonoBehaviour
         if(state == recordState.playing && replay.finished)
         {
             state = recordState.none;
+            replay.paused = true;
             mirror.GetComponent<SimpleMovement>().enabled = false;
             player.GetComponent<SimpleMovement>().enabled = true;
             InputSystem.EnableDevice(keyboard);
+
+            UpdateUI();
         }
     }
 
@@ -60,6 +72,7 @@ public class InputTestManager : MonoBehaviour
             default:
                 break;
         }
+        UpdateUI();
     }
 
     public void Stop()
@@ -80,26 +93,18 @@ public class InputTestManager : MonoBehaviour
             default:
                 break;
         }
-
         state = recordState.none;
+        UpdateUI();
     }
 
     public void Play()
     {
-        switch (state)
-        {
-            case recordState.recording:
-                Stop();
-                break;
-            case recordState.playing:
-                StartMirror();
-                break;
-            case recordState.none:
-                StartMirror();
-                break;
-            default:
-                break;
-        }
+        if (state == recordState.recording)
+            Stop();
+        else
+            StartMirror();
+
+        UpdateUI();
     }
 
     private void StartMirror()
@@ -107,14 +112,17 @@ public class InputTestManager : MonoBehaviour
         if (record == null) return;
         mirror.GetComponent<SimpleMovement>().enabled = true;
         player.GetComponent<SimpleMovement>().enabled = false;
-        //InputSystem.DisableDevice(keyboard);
+
+        
+        InputSystem.DisableDevice(keyboard);
         mirror.transform.position = initial.transform.position + offset;
         mirror.transform.rotation = initial.transform.rotation;
 
         replay = record.Replay();
-        replay.paused = false;
         //replay.WithAllDevicesMappedToNewInstances();
+        replay.WithDeviceMappedFromTo(keyboard, keyboard2);
         replay.PlayAllEventsAccordingToTimestamps();
+        replay.paused = false;
         state = recordState.playing;
     }
 
@@ -131,5 +139,26 @@ public class InputTestManager : MonoBehaviour
     {
         if(replay != null)
             replay.Dispose();
+    }
+
+    private void UpdateUI()
+    {
+        switch (state)
+        {
+            case recordState.recording:
+                recordUI.SetActive(true);
+                playUI.SetActive(false);
+                break;
+            case recordState.playing:
+                recordUI.SetActive(false);
+                playUI.SetActive(true);
+                break;
+            case recordState.none:
+                recordUI.SetActive(false);
+                playUI.SetActive(false);
+                break;
+            default:
+                break;
+        }
     }
 }
