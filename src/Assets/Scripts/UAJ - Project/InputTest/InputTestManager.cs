@@ -16,7 +16,7 @@ public class InputTestManager : MonoBehaviour
     private InputEventTrace record = null;
     private recordState state = recordState.none;
     private GameObject initial;
-    private Keyboard keyboard = null, keyboard2 = null;
+    private Keyboard keyboard = null;
     private InputEventTrace.ReplayController replay;
 
     private Vector3 offset = new Vector3(-8.902f, 0);
@@ -29,8 +29,7 @@ public class InputTestManager : MonoBehaviour
             Destroy(this);
         }
 
-        keyboard = (Keyboard)InputSystem.GetDevice("Keyboard1");
-        keyboard2 = (Keyboard)InputSystem.GetDevice("Keyboard2");
+        keyboard = (Keyboard)InputSystem.GetDevice("Keyboard");
         foreach (UnityEngine.InputSystem.InputDevice device in InputSystem.devices)
         {
             InputSystem.EnableDevice(device);
@@ -113,14 +112,14 @@ public class InputTestManager : MonoBehaviour
         mirror.GetComponent<SimpleMovement>().enabled = true;
         player.GetComponent<SimpleMovement>().enabled = false;
 
-        
-        InputSystem.DisableDevice(keyboard);
+        //foreach (UnityEngine.InputSystem.InputDevice device in InputSystem.devices)
+        //    InputSystem.DisableDevice(device);
+        //InputSystem.DisableDevice(keyboard);
         mirror.transform.position = initial.transform.position + offset;
         mirror.transform.rotation = initial.transform.rotation;
 
         replay = record.Replay();
         //replay.WithAllDevicesMappedToNewInstances();
-        replay.WithDeviceMappedFromTo(keyboard, keyboard2);
         replay.PlayAllEventsAccordingToTimestamps();
         replay.paused = false;
         state = recordState.playing;
