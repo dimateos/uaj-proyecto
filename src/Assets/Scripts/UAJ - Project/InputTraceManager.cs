@@ -92,8 +92,10 @@ public class InputTraceManager : MonoBehaviour {
 
             // Saves input to file
             case TraceManagerMode.RECORD:
+
                 // Filename based on date
-                _savedInputFilename = "IT-" + System.DateTime.Now.ToString().Replace("/", "").Replace(" ", "_").Replace(":", ""); // format
+                string dateFMT = System.DateTime.Now.ToString("u"); //preferred format for file ordering
+                _savedInputFilename = "IT_" + dateFMT.Replace(" ", "_").Replace("-", "").Replace(":", "").Replace("Z", ""); //improved filename
                 Debug.Log("Replay: Input will be saved to file '" + _savedInputFilename + "'");
                 _initialSeed = Random.seed;
                 _trace = new InputEventTrace();
@@ -109,7 +111,7 @@ public class InputTraceManager : MonoBehaviour {
 
                 if (File.Exists(_savePath + _savedInputFilename))
                 {
-                   
+
                     _trace = InputEventTrace.LoadFrom(_savePath + _savedInputFilename);
                 }
                 else
@@ -199,7 +201,7 @@ public class InputTraceManager : MonoBehaviour {
             Debug.Log("Replay: Saving Input to file '" + _savedInputFilename + "'");
 
             // Create save folder if it does not exist
-            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);            
+            if (!Directory.Exists(_savePath)) Directory.CreateDirectory(_savePath);
             _trace.WriteTo(_savePath + _savedInputFilename);
 
             if (!Directory.Exists(_seedPath)) Directory.CreateDirectory(_seedPath);
